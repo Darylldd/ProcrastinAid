@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="ProcrastinAid - A humorous productivity tool to help students beat deadlines with meme culture and modern task management features"/>
+  <meta name="keywords" content="ProcrastinAid, productivity app, student productivity, procrastination tool, meme productivity, pomodoro timer, task tracker, funny productivity tool, study app, procrastination cure, study motivation, time management for students"/>
+  <meta name="google-site-verification" content="kdY55tabuMUfsrknGaTECzd7_d9VeetXtaM0l5e3s_E" />
+ 
+  <title>ProcrastinAid - Beat Deadlines Eventually</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #5E56FF;
+      --primary-light: #7D76FF;
+      --secondary: #2A2D45;
+      --accent: #FFD166;
+      --accent-dark: #FFB700;
+      --background: #F8F9FF;
+      --card-bg: #FFFFFF;
+      --text: #1A1A1A;
+      --text-light: #6B7280;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --blur: 12px;
+      --transition-speed: 0.3s;
+      --border-radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* Header Styles */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      padding: 1.2rem 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    header.scrolled {
+      box-shadow: var(--shadow-sm);
+      padding: 1rem 8%;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      transition: all var(--transition-speed) ease;
+      padding: 0.5rem 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      left: 0;
+      bottom: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .auth-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .cta-button {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      box-shadow: var(--shadow-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .cta-button.secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 8%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      line-height: 1.7;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .meme-bubble {
+      position: absolute;
+      background: white;
+      color: var(--text);
+      padding: 1rem 1.5rem;
+      border-radius: 24px;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      animation: float 6s ease-in-out infinite;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .meme-bubble.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .meme-bubble:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0.5s;
+    }
+
+    .meme-bubble:nth-child(2) {
+      top: 60%;
+      right: 12%;
+      animation-delay: 1s;
+    }
+
+    .meme-bubble:nth-child(3) {
+      bottom: 15%;
+      left: 15%;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Features Section */
+    .section-title {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-title p {
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features {
+      padding: 8rem 8% 6rem;
+      background-color: var(--background);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-speed) ease;
+      border: 1px solid rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+      transition: height var(--transition-speed) ease;
+    }
+
+    .feature-card:hover::before {
+      height: 100%;
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* About Section */
+    .about {
+      padding: 8rem 8%;
+      background-color: var(--card-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-content p {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .about-image {
+      position: relative;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .meme-sticker {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      font-size: 2.5rem;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .meme-sticker:nth-child(1) {
+      top: -20px;
+      left: -20px;
+      background: var(--accent);
+      transform: rotate(-10deg);
+    }
+
+    .meme-sticker:nth-child(2) {
+      bottom: -20px;
+      right: -20px;
+      background: var(--primary);
+      color: white;
+      transform: rotate(10deg);
+      animation-delay: 0.5s;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 6rem 8%;
+      background-color: var(--background);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .testimonial-content {
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .author-info h4 {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .author-info p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    /* Contact Section */
+    .contact {
+      padding: 8rem 8%;
+      background-color: var(--card-bg);
+    }
+
+    .contact-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 3rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .contact-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .contact-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all var(--transition-speed) ease;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(94,86,255,0.1);
+    }
+
+    .contact-form textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    .submit-button {
+      grid-column: span 2;
+      width: 100%;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--secondary);
+      color: white;
+      padding: 4rem 8% 2rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .footer-logo-text {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .footer-about p {
+      opacity: 0.8;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-links h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-bottom p {
+      opacity: 0.7;
+      font-size: 0.85rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .about-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      
+      .about-image {
+        order: -1;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 5%;
+      }
+      
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        padding: 1rem 5%;
+        box-shadow: var(--shadow-sm);
+        border-top: 1px solid rgba(0,0,0,0.05);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.8rem 0;
+        font-size: 1rem;
+      }
+
+      .auth-links {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .auth-links a {
+        width: 100%;
+        text-align: left;
+      }
+
+      .auth-links .cta-button {
+        width: 100%;
+        text-align: center;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+      }
+      
+      .features, .about, .testimonials, .contact {
+        padding: 6rem 5% 4rem;
+      }
+      
+      .contact-form {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-group.full-width {
+        grid-column: span 1;
+      }
+      
+      .submit-button {
+        grid-column: span 1;
+      }
+      
+      .meme-bubble {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .button-group {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .button-group .cta-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="/images/logogg.png" alt="ProcrastinAid Logo" class="logo"/>
+      <span class="logo-text">ProcrastinAid</span>
+    </div>
+    <nav>
+      <button class="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact">Contact</a>
+        <div class="auth-links">
+          <a href="/auth/login">Login</a>
+          <a href="/auth/signup" class="cta-button secondary" style="padding: 0.5rem 1.2rem;">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+    <button class="cta-button">Get Early Access</button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Beat Deadlines <span style="text-decoration: line-through; opacity: 0.7;">Eventually</span> Efficiently</h1><br><br><br>
+      <p>ProcrastinAid combines meme-powered motivation with serious productivity tools to help students get stuff done. Because let's face it, "I'll do it later" isn't always the best strategy.</p>
+      <div class="button-group">
+        <button class="cta-button" onclick="scrollToFeatures()">
+          <i class="fas fa-rocket"></i> Explore Features
+        </button>
+        <a class="cta-button secondary" href="https://www.facebook.com/share/v/14yUDfHuZ6m/" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-play"></i> Watch Demo
+        </a>
+      </div>
+    </div>
+    
+    <!-- Floating meme bubbles -->
+    <div class="meme-bubble">"I'll start tomorrow" - You, probably</div>
+    <div class="meme-bubble">5 min break turns into 5 hours</div>
+    <div class="meme-bubble">Deadline in 3... 2... 1...</div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="section-title">
+      <h2>Productivity, But Make It Fun</h2>
+      <p>We get it - traditional productivity tools can feel like a chore. That's why we've built features that actually work with your student lifestyle.</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+        <h3>Meme-powered Task Tracking</h3>
+        <p>Assign hilarious consequences to unfinished tasks or reward yourself with curated memes when you complete assignments.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-clock"></i></div>
+        <h3>Guilt-free Pomodoro</h3>
+        <p>Customizable work/break intervals with meme breaks that won't derail your entire study session.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-chart-pie"></i></div>
+        <h3>Procrastination Analytics</h3>
+        <p>See exactly when and why you procrastinate with insightful, non-judgmental data visualizations.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-users"></i></div>
+        <h3>Accountability Buddies</h3>
+        <p>Pair up with friends to keep each other on track (or enable savage mode for extra motivation).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+        <h3>Smart Deadline Alerts</h3>
+        <p>Gradually increasing urgency from "plenty of time" to "OMG DO IT NOW" as deadlines approach.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+        <h3>Focus Enhancers</h3>
+        <p>Background noise generators, website blockers, and other tools to minimize distractions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="about-container">
+      <div class="about-content">
+        <h2>Why ProcrastinAid Works When Other Tools Fail</h2>
+        <p>Traditional productivity apps assume you're already motivated. We know better. ProcrastinAid meets you where you are - whether that's "I'll just watch one more video" or "I need to write this entire paper in 3 hours."</p>
+        <p>Our secret? Combining behavioral psychology with internet culture. The memes make it fun, but the science makes it effective. We use techniques like commitment devices, implementation intentions, and temptation bundling - just wrapped in a package that doesn't feel like another chore.</p>
+        <button class="cta-button" style="margin-top: 1.5rem;">
+          <i class="fas fa-flask"></i> Learn the Science
+        </button>
+      </div>
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Students using ProcrastinAid app"/>
+        <div class="meme-sticker">🤓</div>
+        <div class="meme-sticker">🚀</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="testimonials">
+    <div class="section-title">
+      <h2>What Students Are Saying</h2>
+      <p>Don't just take our word for it. Here's what procrastinators-turned-producers have to say.</p>
+    </div>
+    
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          "I went from pulling all-nighters to actually staying ahead of assignments. The meme rewards somehow make completing tasks addictive?"
+        </div>
+        <div class="testimonial-author">
+          <img src="/images/allen.jpg" alt="Jamie L" class="author-avatar"/>
+          <div class="author-info">
+            <h4>John Allen Dinglasan</h4>
+            <p>Expert Procrastrinator/Programmer</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          "The accountability buddy feature saved my GPA. My friend can see when I'm slacking and sends me increasingly ridiculous memes until I get back to work."
+        </div>
+        <div class="testimonial-author">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos M" class="author-avatar"/>
+          <div class="author-info">
+            <h4>Darylld Tupaz</h4>
+            <p>Student</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          "Finally a productivity app that doesn't make me feel guilty. The analytics showed me I actually work best in short bursts with frequent breaks - who knew?"
+        </div>
+        <div class="testimonial-author">
+          <img src="/images/cll.jpg" alt="Priya K" class="author-avatar"/>
+          <div class="author-info">
+            <h4>Cloyd Alec Fesalbon</h4>
+            <p>Student</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="section-title">
+      <h2>Ready to Stop Procrastinating?</h2>
+      <p>Join our waitlist and be the first to know when we launch. Or just send us your favorite procrastination memes.</p>
+    </div>
+    
+    <div class="contact-container">
+      <form class="contact-form" method="POST" action="/contact">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Chronic Procrastinator" required/>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required/>
+        </div>
+        <div class="form-group full-width">
+          <label for="message">What's your biggest productivity struggle?</label>
+          <textarea id="message" name="message" placeholder="Mine is definitely 'just one more episode' syndrome..."></textarea>
+        </div>
+        <div class="form-group full-width">
+          <button type="submit" class="cta-button submit-button">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <div class="footer-logo">
+          <img src="/images/logogg.png" alt="ProcrastinAid Logo"/>
+          <span class="footer-logo-text">ProcrastinAid</span>
+        </div>
+        <p>Helping students beat deadlines since 2023. One meme at a time.</p>
+        <div class="social-links">
+          <a href="www.facebook.com/ProcrastinAid"><i class="fab fa-facebook"></i></a>
+          <a href="instagram.com/oumkiee"><i class="fab fa-instagram"></i></a>
+          <a href="github.com/Darylldd"><i class="fab fa-github"></i></a>
+          <a href="www.reddit.com/user/PersonalWill2430/"><i class="fab fa-reddit"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Updates</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Tutorials</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2023 ProcrastinAid. All rights reserved. | Made with ❤️ and ☕ by students, for students</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll to features function
+    function scrollToFeatures() {
+      document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Hamburger menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+
+      hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.querySelector('i').classList.toggle('fa-bars');
+        hamburger.querySelector('i').classList.toggle('fa-times');
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          hamburger.querySelector('i').classList.add('fa-bars');
+          hamburger.querySelector('i').classList.remove('fa-times');
+        });
+      });
+
+      // Animate features
+      const features = document.querySelectorAll('.feature-card');
+      const bubbles = document.querySelectorAll('.meme-bubble');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      features.forEach(feature => {
+        feature.style.opacity = '0';
+        feature.style.transform = 'translateY(30px)';
+        observer.observe(feature);
+      });
+      
+      // Show meme bubbles with delay
+      setTimeout(() => {
+        bubbles.forEach((bubble, index) => {
+          setTimeout(() => {
+            bubble.classList.add('show');
+          }, index * 500);
+        });
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

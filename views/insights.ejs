@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+      <header>
+    <h1>Welcome to Procrastinaid!</h1>
+    <nav>
+      <ul>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/tasks">📝 Tasks</a></li>
+        <li><a href="/pomodoro">⏱️ Pomodoro Timer</a></li>
+        <li><a href="/ai/insights">📈 AI Insights</a></li>
+        <li><a href="/">🚪 Logout</a></li>
+      </ul>
+    </nav>
+   
+  </header>
+    <h2>Your Study Insights</h2>
+
+<ul>
+  <li><strong>🕒 Most productive hour:</strong> <%= bestHour[0] %>:00 (spent <%= bestHour[1] %> mins)</li>
+  <li><strong>📅 Most productive day:</strong> <%= bestDay[0] %> (spent <%= bestDay[1] %> mins)</li>
+  <li><strong>📘 Top task:</strong> <%= topTask[0] %> (<%= topTask[1] %> mins)</li>
+</ul>
+
+<a href="/dashboard">⬅ Back to Dashboard</a>
+</body>
+</html>

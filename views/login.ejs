@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Login to ProcrastinAid - Your fun productivity tool to beat deadlines with meme-powered motivation"/>
+  <meta name="keywords" content="ProcrastinAid, login, student productivity, procrastination tool"/>
+  <title>Login - ProcrastinAid</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #5E56FF;
+      --primary-light: #7D76FF;
+      --background: #F8F9FF;
+      --card-bg: #FFFFFF;
+      --text: #1A1A1A;
+      --text-light: #6B7280;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --blur: 12px;
+      --transition-speed: 0.3s;
+      --border-radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --error: #EF4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .login-container {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-md);
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(94,86,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .error {
+      color: var(--error);
+      background: rgba(239,68,68,0.1);
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-light);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: all var(--transition-speed) ease;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(94,86,255,0.1);
+    }
+
+    .cta-button {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .signup-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .signup-link a:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .meme-bubble {
+      position: absolute;
+      background: white;
+      color: var(--text);
+      padding: 0.8rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      font-size: 0.85rem;
+      animation: float 5s ease-in-out infinite;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.5s ease;
+    }
+
+    .meme-bubble.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .meme-bubble:nth-child(1) {
+      top: -10%;
+      left: 10%;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .login-container {
+        padding: 2rem;
+      }
+
+      .meme-bubble {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login to ProcrastinAid</h1>
+    <% if (typeof error !== 'undefined') { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <form method="POST" action="/auth/login">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="e.g. MemeMaster" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Your secret code" required />
+      </div>
+      <button type="submit" class="cta-button">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </button>
+    </form>
+    <p class="signup-link">Don't have an account? <a href="/auth/signup">Sign up here</a></p>
+    <div class="meme-bubble">"Just one more login attempt..."</div>
+  </div>
+
+  <script>
+    // Animate meme bubble on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const bubble = document.querySelector('.meme-bubble');
+      setTimeout(() => {
+        bubble.classList.add('show');
+      }, 500);
+    });
+  </script>
+</body>
+</html>

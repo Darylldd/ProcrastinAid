@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Add a new task in ProcrastinAid - Manage your tasks with meme-powered motivation"/>
+  <meta name="keywords" content="ProcrastinAid, new task, task management, student productivity"/>
+  <title>Add New Task - ProcrastinAid</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;700&display=stylesheet"/>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #5E56FF;
+      --primary-light: #7D76FF;
+      --background: #F8F9FF;
+      --card-bg: #FFFFFF;
+      --text: #1A1A1A;
+      --text-light: #6B7280;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --blur: 12px;
+      --transition-speed: 0.3s;
+      --border-radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --error: #EF4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Styles */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      padding: 1.2rem 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    header.scrolled {
+      box-shadow: var(--shadow-sm);
+      padding: 1rem 8%;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      transition: all var(--transition-speed) ease;
+      padding: 0.5rem 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      left: 0;
+      bottom: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 600px;
+      margin: 8rem auto 4rem;
+      padding: 0 8%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .task-form-container {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-md);
+      width: 100%;
+      position: relative;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .task-form-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(94,86,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .error {
+      color: var(--error);
+      background: rgba(239,68,68,0.1);
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-light);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: all var(--transition-speed) ease;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(94,86,255,0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .cta-button {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      box-shadow: var(--shadow-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .back-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .back-link a:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .meme-bubble {
+      position: absolute;
+      background: white;
+      color: var(--text);
+      padding: 0.8rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      font-size: 0.85rem;
+      animation: float 5s ease-in-out infinite;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.5s ease;
+    }
+
+    .meme-bubble.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .meme-bubble:nth-child(1) {
+      top: -10%;
+      left: 10%;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 5%;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        padding: 1rem 5%;
+        box-shadow: var(--shadow-sm);
+        border-top: 1px solid rgba(0,0,0,0.05);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.8rem 0;
+        font-size: 1rem;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      main {
+        margin: 6rem auto 3rem;
+        padding: 0 5%;
+      }
+
+      .meme-bubble {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .task-form-container {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="/images/logogg.png" alt="ProcrastinAid Logo" class="logo"/>
+      <span class="logo-text">ProcrastinAid</span>
+    </div>
+    <nav>
+      <button class="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/tasks">Tasks</a>
+        <a href="/pomodoro">Pomodoro Timer</a>
+        <a href="/ai/insights">AI Insights</a>
+        <a href="/">Logout</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="task-form-container">
+      <h1>Add New Task</h1>
+      <div class="meme-bubble">"One task now, Netflix later!"</div>
+      <% if (typeof error !== 'undefined') { %>
+        <p class="error"><%= error %></p>
+      <% } %>
+      <form action="/tasks/new" method="post">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" placeholder="e.g. Finish Math Homework" value="<%= title || '' %>" required />
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" placeholder="e.g. Complete problems 1-10 from Chapter 5"><%= description || '' %></textarea>
+        </div>
+        <button type="submit" class="cta-button">
+          <i class="fas fa-plus"></i> Add Task
+        </button>
+      </form>
+      <p class="back-link"><a href="/tasks">Back to Tasks</a></p>
+    </div>
+  </main>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Hamburger menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+
+      hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.querySelector('i').classList.toggle('fa-bars');
+        hamburger.querySelector('i').classList.toggle('fa-times');
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          hamburger.querySelector('i').classList.add('fa-bars');
+          hamburger.querySelector('i').classList.remove('fa-times');
+        });
+      });
+
+      // Animate meme bubble
+      const bubble = document.querySelector('.meme-bubble');
+      setTimeout(() => {
+        bubble.classList.add('show');
+      }, 500);
+    });
+  </script>
+</body>
+</html>

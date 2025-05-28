@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="ProcrastinAid Dashboard - Manage tasks, track Pomodoro sessions, and get productivity insights"/>
+  <meta name="keywords" content="ProcrastinAid, dashboard, student productivity, task management, pomodoro timer"/>
+  <title>Dashboard | ProcrastinAid</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;700&display=stylesheet"/>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #5E56FF;
+      --primary-light: #7D76FF;
+      --background: #F8F9FF;
+      --card-bg: #FFFFFF;
+      --text: #1A1A1A;
+      --text-light: #6B7280;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --blur: 12px;
+      --transition-speed: 0.3s;
+      --border-radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Styles */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      padding: 1.2rem 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    header.scrolled {
+      box-shadow: var(--shadow-sm);
+      padding: 1rem 8%;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      transition: all var(--transition-speed) ease;
+      padding: 0.5rem 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      left: 0;
+      bottom: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1200px;
+      margin: 8rem auto 4rem;
+      padding: 0 8%;
+      flex: 1;
+    }
+
+    h1 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    h2 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .task-section, .overview-section, .quick-actions {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: all var(--transition-speed) ease;
+      position: relative;
+    }
+
+    .task-section:hover, .quick-actions:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .task-section::before, .quick-actions::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+      transition: height var(--transition-speed) ease;
+    }
+
+    .task-section:hover::before, .quick-actions:hover::before {
+      height: 100%;
+    }
+
+    .task-section p, .overview-section p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .task-section ul, .quick-actions ul {
+      list-style: none;
+    }
+
+    .task-section li, .quick-actions li {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 0.8rem;
+    }
+
+    .task-section a, .quick-actions a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .task-section a:hover, .quick-actions a:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .cta-button {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      box-shadow: var(--shadow-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .quick-actions ul {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .quick-actions li {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .quick-actions a {
+      width: 100%;
+      text-align: center;
+    }
+
+    .meme-bubble {
+      position: absolute;
+      background: white;
+      color: var(--text);
+      padding: 0.8rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      font-size: 0.85rem;
+      animation: float 5s ease-in-out infinite;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.5s ease;
+    }
+
+    .meme-bubble.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .meme-bubble:nth-child(1) {
+      top: 10%;
+      left: 5%;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 2rem 8%;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 5%;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        padding: 1rem 5%;
+        box-shadow: var(--shadow-sm);
+        border-top: 1px solid rgba(0,0,0,0.05);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.8rem 0;
+        font-size: 1rem;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      main {
+        margin: 6rem auto 3rem;
+        padding: 0 5%;
+      }
+
+      .quick-actions ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .meme-bubble {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      .task-section, .overview-section, .quick-actions {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="/images/logogg.png" alt="ProcrastinAid Logo" class="logo"/>
+      <span class="logo-text">ProcrastinAid</span>
+    </div>
+    <nav>
+      <button class="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/tasks">Tasks</a>
+        <a href="/pomodoro">Pomodoro Timer</a>
+        <a href="/ai/insights">AI Insights</a>
+        <a href="/">Logout</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Welcome to ProcrastinAid!</h1>
+    <div class="meme-bubble">"Time to get stuff done... maybe!"</div>
+
+    <section class="task-section">
+      <h2>Your Tasks and Pomodoro Sessions</h2>
+      <% if (tasks.length === 0) { %>
+        <p>You have no tasks yet. <a href="/tasks/new" class="cta-button"><i class="fas fa-plus"></i> Add a Task</a></p>
+      <% } else { %>
+        <% tasks.forEach(task => { %>
+          <div class="task-section">
+            <h3><%= task.title %></h3>
+            <p><%= task.description %></p>
+            <h4>Pomodoro Sessions</h4>
+            <ul>
+              <% 
+                const sessionsForTask = sessions.filter(s => s.task_id === task.id);
+                if (sessionsForTask.length === 0) { 
+              %>
+                <li>No Pomodoro sessions for this task yet.</li>
+              <% } else { %>
+                <% sessionsForTask.forEach(session => { %>
+                  <li>
+                    Duration: <%= session.duration %> minutes — 
+                    Date: <%= new Date(session.timestamp).toLocaleString() %>
+                  </li>
+                <% }) %>
+              <% } %>
+            </ul>
+          </div>
+        <% }) %>
+      <% } %>
+    </section>
+
+    <section class="overview-section">
+      <h2>Today’s Overview</h2>
+      <p>You can start a focus session, review your tasks, or check productivity insights.</p>
+    </section>
+
+    <section class="quick-actions">
+      <h2>Quick Actions</h2>
+      <ul>
+        <li><a href="/pomodoro" class="cta-button"><i class="fas fa-clock"></i> Start Pomodoro</a></li>
+        <li><a href="/tasks" class="cta-button"><i class="fas fa-tasks"></i> View Tasks</a></li>
+        <li><a href="/ai/insights" class="cta-button"><i class="fas fa-chart-pie"></i> Check Insights</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 ProcrastinAid. All rights reserved. | Made with ❤️ and ☕ by students, for students</p>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Hamburger menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+
+      hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.querySelector('i').classList.toggle('fa-bars');
+        hamburger.querySelector('i').classList.toggle('fa-times');
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          hamburger.querySelector('i').classList.add('fa-bars');
+          hamburger.querySelector('i').classList.remove('fa-times');
+        });
+      });
+
+      // Animate meme bubble
+      const bubble = document.querySelector('.meme-bubble');
+      setTimeout(() => {
+        bubble.classList.add('show');
+      }, 500);
+
+      // Animate task sections
+      const sections = document.querySelectorAll('.task-section, .overview-section, .quick-actions');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      sections.forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>
